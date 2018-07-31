@@ -1,9 +1,11 @@
+#import libraries
 import bs4
 import datetime
 
 from urllib.request import urlopen as request
 from bs4 import BeautifulSoup as soup
 
+# create time vairable
 current_time = datetime.datetime.now()
 
 # variable to make url more readbale
@@ -20,20 +22,65 @@ uClient.close()
 # html parsing
 page_content = soup(page_html, "html.parser")
 
-ticker_table = page_content.findAll("div",{"class":"Ovx(s)"})
-
-for t in ticker_table:
-
-    # attempting to select entire box for an individual company
-    ticker_box_white = t.findAll("tr",{"class":"SimpleDataTableRow Bgc($extraLightBlue):h BdB Bdbc($finLightGrayAlt) Bdbc($tableBorderBlue):h H(32px) Bgc(white) "})
-    ticker_box_grey = t.findAll("tr",{"class":"SimpleDataTableRow Bgc($extraLightBlue):h BdB Bdbc($finLightGrayAlt) Bdbc($tableBorderBlue):h H(32px) Bgc($altRowColor) "})
-
-    print("")
-    print(len(ticker_box_white))
-
-    print("")
-    print(len(ticker_box_grey))
-
 # Timestamp for data purposes
-print("\nTime & Date extracted:")
+print("\n****************************")
+print("Time & Date extracted:")
 print(current_time)
+print("****************************\n")
+
+ticker_column_white = page_content.findAll("tr",{"class":"SimpleDataTableRow Bgc($extraLightBlue):h BdB Bdbc($finLightGrayAlt) Bdbc($tableBorderBlue):h H(32px) Bgc(white) "})
+ticker_column_grey = page_content.findAll("tr",{"class":"SimpleDataTableRow Bgc($extraLightBlue):h BdB Bdbc($finLightGrayAlt) Bdbc($tableBorderBlue):h H(32px) Bgc($altRowColor) "})
+
+for t in ticker_column_white:
+
+    symbol_w = t.a.text
+    print("SYMBOL:          " + symbol_w)
+
+    # NAME
+    ticker_name_w = t.img["alt"]
+    print("NAME:            " + ticker_name_w)
+
+    # PRICE
+    price_w = t.span.text
+    print("PRICE:           $" + price_w)
+
+    # change in stock
+    changeContainer_w = t.findAll("td",{"aria-label":"Change"})
+    change_w = changeContainer_w[0].text
+    print("CHANGE:          " + change_w)
+
+    # 24hr change in stock
+    percent_changeContainer_w = t.findAll("td",{"aria-label":"% Change"})
+    percent_change_w = percent_changeContainer_w[0].text
+    print("PERCENT CHANGE:  " + percent_change_w)
+
+    # print newline to separate company
+    print("")
+
+print("-------------------------------------------------")
+
+for t in ticker_column_grey:
+
+    symbol_g = t.a.text
+    print("SYMBOL:           " + symbol_g)
+
+    # name
+    ticker_name_g = t.img["alt"]
+    print("NAME:             " + ticker_name_g)
+
+    # PRICE
+    price_g = t.span.text
+    print("PRICE:            $" + price_g)
+
+    # change in stock
+    changeContainer_g = t.findAll("td",{"aria-label":"Change"})
+    change_g = changeContainer_g[0].text
+    print("CHANGE:           " + change_g)
+
+    # 24hr change in stock
+    percent_changeContainer_g = t.findAll("td",{"aria-label":"% Change"})
+    percent_change_g = percent_changeContainer_g[0].text
+    print("PERCENT CHANGE:   " + percent_change_g)
+
+    # print newline to separate company
+    print("")
