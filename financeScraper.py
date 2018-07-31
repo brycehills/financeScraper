@@ -20,14 +20,20 @@ uClient.close()
 # html parsing
 page_content = soup(page_html, "html.parser")
 
-# print(page_content.head)
+ticker_table = page_content.findAll("div",{"class":"Ovx(s)"})
 
-# attempting to grab entire table
-table = page_content.findAll("div",{"id":"fin-scr-res-table"})
+for t in ticker_table:
+
+    # attempting to select entire box for an individual company
+    ticker_box_white = t.findAll("tr",{"class":"SimpleDataTableRow Bgc($extraLightBlue):h BdB Bdbc($finLightGrayAlt) Bdbc($tableBorderBlue):h H(32px) Bgc(white) "})
+    ticker_box_grey = t.findAll("tr",{"class":"SimpleDataTableRow Bgc($extraLightBlue):h BdB Bdbc($finLightGrayAlt) Bdbc($tableBorderBlue):h H(32px) Bgc($altRowColor) "})
+
+    print("")
+    print(len(ticker_box_white))
+
+    print("")
+    print(len(ticker_box_grey))
 
 # Timestamp for data purposes
 print("\nTime & Date extracted:")
 print(current_time)
-
-print(table)
-print(len(table))
