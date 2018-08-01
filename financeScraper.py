@@ -19,6 +19,18 @@ page_html = uClient.read()
 # close page
 uClient.close()
 
+# create file variable----------------------------------------------------------
+file_name = "fin_scrape.csv"
+
+# open file and w for write
+f = open(file_name,"w")
+
+# header column for file
+file_headers = "SYMBOL, NAME, PRICE, CHANGE, PERCENT CHANGE, MARKET CAP, VOLUME\n"
+f.write(file_headers)
+
+
+
 # html parsing
 page_content = soup(page_html, "html.parser")
 
@@ -54,6 +66,18 @@ for t in ticker_column_white:
     percent_change_w = percent_changeContainer_w[0].text
     print("PERCENT CHANGE:  " + percent_change_w)
 
+    # marketcap
+    marketcap_container_w = t.findAll("td",{"aria-label":"Market Cap"})
+    marketcap_w = marketcap_container_w[0].text
+    print("MARKET CAP:      " + marketcap_w)
+
+    # volume
+    volume_container_w = t.findAll("td",{"aria-label":"Volume in Currency (Since 0:00 UTC)"})
+    volume_w = volume_container_w[0].text
+    print("VOLUME:          " + volume_w)
+
+    f.write(symbol_w + ","+ ticker_name_w + "," + price_w.replace(",","") + "," + change_w + "," + percent_change_w.replace(",","") + "," + marketcap_w.replace(",","") + "," + volume_w.replace(",","") + "\n")
+
     # print newline to separate company
     print("")
 
@@ -82,5 +106,20 @@ for t in ticker_column_grey:
     percent_change_g = percent_changeContainer_g[0].text
     print("PERCENT CHANGE:   " + percent_change_g)
 
+    # marketcap
+    marketcap_container_g = t.findAll("td",{"aria-label":"Market Cap"})
+    marketcap_g = marketcap_container_g[0].text
+    print("MARKET CAP:       " + marketcap_g)
+
+    # volume
+    volume_container_g = t.findAll("td",{"aria-label":"Volume in Currency (Since 0:00 UTC)"})
+    volume_g = volume_container_g[0].text
+    print("VOLUME:           " + volume_g)
+
+    f.write(symbol_g + "," + ticker_name_g + "," + price_g.replace(",","") + "," + change_g + "," + percent_change_g.replace(",","") + "," + marketcap_g.replace(",","") + "," + volume_g.replace(",","") + "\n")
+
+
     # print newline to separate company
     print("")
+
+f.close()
